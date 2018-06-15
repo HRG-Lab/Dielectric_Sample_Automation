@@ -1,0 +1,3 @@
+myFile = open("sample.txt", "w")
+print("Name" + myFile.name)
+print("Mode" + myFile.mode)
