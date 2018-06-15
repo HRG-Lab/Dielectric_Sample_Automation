@@ -1,0 +1,82 @@
+; Installation inf for Legacy ECal device
+;
+; Copyright (c) Agilent Technologies, 2012
+;
+
+;--------- Version Section ---------------------------------------------------
+[Version]
+Signature=$WINDOWS NT$
+Provider=%ProviderName%
+Class=USBTestAndMeasurementDevice
+ClassGUID={A9FDBB24-128A-11d5-9961-00108335E361}
+DriverVer=12/20/2013,14.0.0.0
+CatalogFile=ausbtmcECal.cat
+
+;--------- SourceDiskNames and SourceDiskFiles Section -----------------------
+[SourceDisksNames.x86]
+1=%DiskDescription%,,,i386
+
+[SourceDisksNames.amd64]
+1=%DiskDescription%,,,amd64
+
+[SourceDisksFiles]
+ausbtmcECal.sys=1
+
+;--------- ClassInstall Section -------------------------------
+[ClassInstall32]
+Addreg=UsbtmcClassAddReg
+
+[UsbtmcClassAddReg]
+HKR,,,,%UsbTmcClassName%
+HKR,,Icon,,"-20"
+
+;--------- DestinationDirs Section -------------------------------------------
+
+[DestinationDirs]
+UsbtmcECal_Files_Driver = 10,System32\Drivers
+
+;--------- Manufacturer and Models Sections ----------------------------------
+[Manufacturer]
+%MfgName%=Mfg0,NTx86,NTamd64
+
+[Mfg0]
+%DeviceDesc%=UsbtmcECal_DDI, USB\VID_0957&PID_0001
+
+[Mfg0.NTx86]
+%DeviceDesc%=UsbtmcECal_DDI, USB\VID_0957&PID_0001
+
+[Mfg0.NTamd64]
+%DeviceDesc%=UsbtmcECal_DDI, USB\VID_0957&PID_0001
+                         
+;---------- DDInstall Sections -----------------------------------------------
+[UsbtmcECal_DDI]
+CopyFiles=UsbtmcECal_Files_Driver
+CopyInf=ausbtmcECal.inf
+AddReg=UsbtmcECal_AddReg
+
+[UsbtmcECal_DDI.Services]
+Addservice = UsbtmcECal, 0x00000002, UsbtmcECal_AddService
+
+[UsbtmcECal_AddService]
+DisplayName    = %SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\ausbtmcECal.sys
+
+[UsbtmcECal_AddReg]
+HKR,,TimeoutRead,0x00010001,0
+HKR,,TimeoutWrite,0x00010001,0
+
+; --------- Files -------------
+[UsbtmcECal_Files_Driver]
+ausbtmcECal.sys
+
+;--------- Strings Section ---------------------------------------------------
+[Strings]
+MfgName="Agilent Technologies"
+DeviceDesc="Agilent USB ECal Module"
+SvcDesc="ausbtmcECal"
+ProviderName="Agilent Technologies"
+DiskDescription="USBTMC Driver Installation"
+UsbTmcClassName="USB Test and Measurement Devices"
